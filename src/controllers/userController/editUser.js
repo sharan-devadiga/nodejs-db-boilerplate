@@ -1,41 +1,38 @@
-import { RESPONSE } from "../../constants/global.js";
-import { send, setErrResMsg } from "../../helper/responseHelper.js";
-import initUserModel from "../../model/userModel.js";
 import { Router } from "express";
-import bcrypt from "bcrypt";
+import { send, setErrResMsg } from "../../helper/responseHelper.js";
+import { RESPONSE } from "../../constants/global.js";
+import initUserModel from "../../model/userModel.js";
 
 const router = Router();
-export default router.post("/", async (req, res) => {
-  console.log("Create User");
+export default router.put("/", async (req, res) => {
   try {
-    const { name, email, password } = req.body || {};
+    const { id } = req.query;
+    const { name, email } = req.body || {};
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
+
     if (!email) {
       return send(res, setErrResMsg(RESPONSE.REQUIRED, "email"));
     }
+
     if (!emailRegex.test(email)) {
       return send(res, setErrResMsg(RESPONSE.FORMAT, "email"));
     }
-    if (!password) {
-      return send(res, setErrResMsg(RESPONSE.REQUIRED, "Password"));
-    }
-    if (!passwordRegex.test(password)) {
-      return send(res, setErrResMsg(RESPONSE.FORMAT, "passowrd"));
-    }
+    // if (!password) {
+    //   return send(res, setErrResMsg(RESPONSE.REQUIRED, "password"));
+    // }
+    // if (!passwordRegex.test(password)) {
+    //   return send(res, setErrResMsg(RESPONSE.FORMAT, "email"));
+    // }
     const model = await initUserModel();
-    const encrypted_password = await bcrypt.hash(password, 10);
-    const user = await model.create({
-      name,
-      email,
-      password: encrypted_password,
-    });
-
+    await model.update({ name: name, email: email }, { where: { id: id } });
+    // return res.send({code:200,message:"Success"})
     return send(res, RESPONSE.SUCCESS);
   } catch (error) {
-    console.log("CreateUser Controller :", error);
+    console.log(error);
+
     return send(res, RESPONSE.UNKNOWN_ERROR);
   }
 });

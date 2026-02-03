@@ -2,8 +2,6 @@ import { Sequelize } from "sequelize";
 
 let connection = null;
 const getConnection = async () => {
-  console.log(process.env.PGDATABASE);
-
   if (!connection) {
     connection = new Sequelize({
       database: process.env.PGDATABASE,

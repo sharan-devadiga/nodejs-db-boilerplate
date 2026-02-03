@@ -15,4 +15,12 @@ export const RESPONSE = {
     code: 100,
     message: "Not in Format",
   },
+  NOT_FOUND: {
+    code: 404,
+    message: "Not Found",
+  },
+  INVALID: {
+    code: 208,
+    message: "Is Invalid",
+  },
 };

@@ -35,7 +35,7 @@ export default router.post("/", async (req, res) => {
 
     return send(res, RESPONSE.SUCCESS);
   } catch (error) {
-    console.log("CreateUser Controller :", error);
+    console.log("Create user Controller :", error);
     return send(res, RESPONSE.UNKNOWN_ERROR);
   }
 });

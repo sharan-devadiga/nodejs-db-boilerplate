@@ -7,6 +7,7 @@ import createUser from "./src/controllers/userController/createUser.js";
 import deleteUser from "./src/controllers/userController/deleteUser.js";
 import editUser from "./src/controllers/userController/editUser.js";
 import userlist from "./src/controllers/userController/userlist.js";
+import EmployeeController from "./src/controllers/EmployeeController/apihandlers.js";
 
 const router = (app) => {
   app.use("/login", login);
@@ -19,6 +20,8 @@ const router = (app) => {
   app.use("/liststudents", studentlist);
   app.use("/editstudents", editstudent);
   app.use("/deletestudent", deletestudent);
+
+  app.use("/employee", EmployeeController);
 };
 
 export default router;

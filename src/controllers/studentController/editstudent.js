@@ -8,14 +8,13 @@ const route = Router();
 
 export default route.put("/", async (req, res) => {
   try {
-    const { id } = req.query;
+    const { student_id } = req.query;
     const { name, email } = req.body || {};
 
-      
     const studentModel = await initStudentmodel();
     await studentModel.update(
       { name: name, email: email },
-      { where: { id: id } },
+      { where: { student_id: student_id } },
     );
     return send(res, RESPONSE.SUCCESS);
   } catch (error) {

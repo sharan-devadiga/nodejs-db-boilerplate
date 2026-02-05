@@ -2,6 +2,7 @@ import { Router } from "express";
 import { RESPONSE } from "../../../constants/global.js";
 import { send, setErrResMsg } from "../../../helper/responseHelper.js";
 import initUserModel from "../../../model/userModel.js";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 const route = Router();
@@ -17,8 +18,8 @@ export default route.post("/", async (req, res) => {
       return send(res, setErrResMsg(RESPONSE.REQUIRED, "password"));
     }
 
-    const model = await initUserModel();
-    const user = await model.findOne({
+    let model = await initUserModel();
+    let user = await model.findOne({
       where: { email: email },
     });
     if (!user) {
@@ -28,8 +29,15 @@ export default route.post("/", async (req, res) => {
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
       return send(res, setErrResMsg(RESPONSE.INVALID, "password"));
+    } else {
+      const token = jwt.sign(
+        {
+          id: user.id,
+        },
+        process.env.SECRET_KEY,
+      );
+      return send(res, RESPONSE.SUCCESS, { token });
     }
-    return send(res, RESPONSE.SUCCESS);
   } catch (error) {
     console.log("Login page", error);
     return send(res, setErrResMsg(RESPONSE.UNKNOWN_ERROR));

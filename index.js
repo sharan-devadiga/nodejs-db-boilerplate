@@ -2,7 +2,7 @@ import express from "express";
 import getConnection from "./src/helper/dbconnection.js";
 import env from "dotenv";
 import router from "./routes.js";
-env.config();
+env.config({ quiet: true });
 const app = express();
 const PORT = 3000;
 app.use(express.json());

@@ -1,14 +1,15 @@
 import { DataTypes } from "sequelize";
 import getConnection from "../helper/dbconnection.js";
+import initStudentmodel from "./studentModel.js";
 
-let employee = null;
+let teacher = null;
 
-const initEmployeeModel = async () => {
-  if (employee) return employee;
+const initteacherModel = async () => {
+  if (teacher) return teacher;
 
   const sequelize = await getConnection();
 
-  employee = sequelize.define("employee", {
+  teacher = sequelize.define("teacher", {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
@@ -34,7 +35,19 @@ const initEmployeeModel = async () => {
       type: DataTypes.STRING,
     },
   });
-  await employee.sync({ alter: true });
-  return employee;
+
+  let student_model = await initStudentmodel();
+
+  student_model.hasOne(teacher, {
+    as: "studentModel",
+    onDelete: "cascade",
+    foreignKey: {
+      allowNull: false,
+      name: "student_id",
+    },
+    targetKey: "student_id",
+  });
+  await teacher.sync({ alter: true });
+  return teacher;
 };
-export default initEmployeeModel;
+export default initteacherModel;

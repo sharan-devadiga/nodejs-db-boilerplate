@@ -23,4 +23,8 @@ export const RESPONSE = {
     code: 208,
     message: "Is Invalid",
   },
+  ACCESS_DENIED: {
+    code: 300,
+    message: "ACCESS  DENIED",
+  },
 };
